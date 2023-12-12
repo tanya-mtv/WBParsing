@@ -24,3 +24,6 @@ vendor/
 
 docker-compose.yml
 config.yaml
+
+# Third-party binaries
+*.exe

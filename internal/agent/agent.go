@@ -34,7 +34,6 @@ func (a *Agent) Run() error {
 	defer sqlClient.Close() // nolint: errcheck
 	err := sqlClient.PingContext(ctx)
 	if err != nil {
-		a.log.Errorf(err.Error())
 		a.log.Fatal("Error creating connection pool: " + err.Error())
 	}
 	a.log.Infof("MSSQL connected: %+v", a.cfg.MSSQL.DSN)
@@ -42,8 +41,8 @@ func (a *Agent) Run() error {
 	sqlRepo := db.NewSQLStorage(a.log, a.cfg, sqlClient)
 	a.ps = api.NewProductService(a.cfg, a.log, sqlRepo)
 
-	// reportIntervalTicker := time.NewTicker(time.Duration(a.cfg.ReportInterval) * time.Hour)
-	reportIntervalTicker := time.NewTicker(time.Duration(a.cfg.ReportInterval) * time.Second)
+	reportIntervalTicker := time.NewTicker(time.Duration(a.cfg.ReportInterval) * time.Hour)
+	// reportIntervalTicker := time.NewTicker(time.Duration(a.cfg.ReportInterval) * time.Second)
 	defer reportIntervalTicker.Stop()
 
 	for {

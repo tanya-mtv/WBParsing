@@ -30,3 +30,6 @@ config.yaml
 
 # Secrets
 secrets/
+
+# Logs
+logs/

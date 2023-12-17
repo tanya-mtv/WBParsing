@@ -15,17 +15,18 @@ services:
     volumes:
       - my-volume:/var/opt/mssql
 
-  # crawler:
-  #   depends_on:
-  #     - mssql
-  #   container_name: crawler
-  #   image: wb-parsing:latest
-  #   # restart: always
-  #   environment:
-  #     CONFIG_TYPE: yaml
-  #     CONFIG_PATH: /usr/local/etc/crawler.yaml
-  #   volumes:
-  #     - ./secrets/uat_config.yaml:/usr/local/etc/crawler.yaml:ro
+  crawler:
+    depends_on:
+      - mssql
+    container_name: crawler
+    image: wb-parsing:latest
+    # restart: always
+    # environment:
+    #   CONFIG_TYPE: yaml
+    #   CONFIG_PATH: /usr/local/etc/crawler.yaml
+    volumes:
+      - ./secrets/uat_config.yaml:/opt/crawler/config.yaml:ro
+      - ./logs:/opt/crawler/logs:rw
 
   # MS SQL Tools
   # docker run -it emergn/mssql-tools -S azuredatabase.database.windows.net -d azuresqldbname -U AADuser@example.com -P SecUrEpAsSwOrd -G

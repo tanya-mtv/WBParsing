@@ -84,6 +84,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 # ACCEPT_EULA=Y is required to install Microsoft ODBC Driver
 ARG ACCEPT_EULA=Y
 
+ENV CONFIG_TYPE yaml
+ENV CONFIG_PATH /usr/local/etc/crawler.yaml
+
 RUN apt-get update && \
     apt-get upgrade --yes && \
     apt-get install --yes \
@@ -109,5 +112,5 @@ COPY --from=builder /wb-parsing-crawler /usr/local/bin/wb-parsing-crawler
 
 WORKDIR ${WORK_DIR}/
 
-# USER ${USERNAME}
-# CMD ["main.py"]
+USER ${USERNAME}
+CMD ["/usr/local/bin/wb-parsing-crawler"]

@@ -46,7 +46,7 @@ func NewProductService(cfg *config.Config, log logger.Logger, repo storage) *Pro
 func (p *ProductService) Post(ctx context.Context) (models.Out, error) {
 	// var data models.Data
 	data := models.Out{}
-	req, err := retryablehttp.NewRequestWithContext(ctx, "POST", p.cfg.WBURLList, bytes.NewBuffer([]byte(prepareAPIBody(p.cfg.Limit))))
+	req, err := retryablehttp.NewRequestWithContext(ctx, "POST", p.cfg.WbListUrl, bytes.NewBuffer([]byte(prepareAPIBody(p.cfg.Limit))))
 	if err != nil {
 		p.log.Errorf(err.Error())
 		return data, err
@@ -85,7 +85,7 @@ func (p *ProductService) PostPagination(ctx context.Context) ([]models.Out, erro
 	var list []models.Out
 	var data models.Out
 	for {
-		req, err := retryablehttp.NewRequestWithContext(ctx, "POST", p.cfg.WBURLList, bytes.NewBuffer([]byte(prepareAPIBody(p.cfg.Limit))))
+		req, err := retryablehttp.NewRequestWithContext(ctx, "POST", p.cfg.WbListUrl, bytes.NewBuffer([]byte(prepareAPIBody(p.cfg.Limit))))
 		if err != nil {
 			p.log.Errorf("Post erro to WB", err.Error())
 			return list, err

@@ -1,0 +1,27 @@
+---
+# WB API enpoints and API Key
+token: "<WB API Token>"
+
+# URL to get internal catalog IDs. Environment variable: WB_LIST_URL
+wb_list_url: "https://suppliers-api.wildberries.ru/content/v1/cards/cursor/list"
+# Base URL catalog items. Environment variable: WB_CATALOG_URL
+wb_catalog_url: "https://www.wildberries.ru/catalog/"
+
+#
+reportInterval: 1
+limit: 1000
+
+logger:
+  level: debug
+  type: plaintext
+  dev_mode: false
+  filename: "logs/app.log"
+
+# MSSQL Credentials
+mssql:
+  server: "localhost"
+  user: "<USERNAME>"
+  password: "<PASSWORD>"
+  dsn: "<DSN>"
+  driver: "odbc"
+  port: 1433

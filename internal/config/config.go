@@ -16,8 +16,8 @@ const (
 	cfgPath        = "config.yaml"
 	APIToken       = "APIToken"
 	repInterval    = "reportInterval"
-	WBURLList      = "WBURLList"
-	wb_catalog_url = "wb_catalog_url"
+	wb_list_url    = "WB_LIST_URL"
+	wb_catalog_url = "WB_CATALOG_URL"
 	limit          = "LIMIT"
 )
 
@@ -28,14 +28,14 @@ type Config struct {
 	Logger         *logger.Config `mapstructure:"logger"`
 	Token          string
 	ReportInterval int
-	WBURLList      string `mapstructure:"wbURLList"`
+	WbListUrl      string `mapstructure:"wb_list_url"`
 	WbCatalogUrl   string `mapstructure:"wb_catalog_url"`
 	Limit          int64
 	MSSQL          *ConfigMSSQL `mapstructure:"mssql"`
 }
 
 func init() {
-	flag.StringVar(&configType, "config-type", "yaml", "Format of configuration file type. Supported formats is: yaml")
+	flag.StringVar(&configType, "config-type", "yaml", "Format of configuration file type. Supported formats are: JSON, TOML, YAML, HCL, envfile and Java properties config files")
 	flag.StringVar(&configPath, "config", "config.yaml", "Path to configuration file")
 }
 
@@ -89,9 +89,9 @@ func InitConfig() (*Config, error) {
 		cfg.Limit = intlimit
 	}
 
-	WBURLList := os.Getenv(WBURLList)
-	if cfg.WBURLList == "" {
-		cfg.WBURLList = WBURLList
+	wb_list_url := os.Getenv(wb_list_url)
+	if cfg.WbListUrl == "" {
+		cfg.WbListUrl = wb_list_url
 	}
 
 	wb_catalog_url := os.Getenv(wb_catalog_url)

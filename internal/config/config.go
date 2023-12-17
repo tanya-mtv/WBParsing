@@ -10,15 +10,15 @@ import (
 )
 
 const (
-	CONFIG_TYPE = "CONFIG_TYPE"
-	CONFIG_PATH = "CONFIG_PATH"
-	yaml        = "yaml"
-	cfgPath     = "config.yaml"
-	APIToken    = "APIToken"
-	repInterval = "reportInterval"
-	WBURLList   = "WBURLList"
-	WBURLParce  = "WBURLParce"
-	limit       = "LIMIT"
+	CONFIG_TYPE    = "CONFIG_TYPE"
+	CONFIG_PATH    = "CONFIG_PATH"
+	yaml           = "yaml"
+	cfgPath        = "config.yaml"
+	APIToken       = "APIToken"
+	repInterval    = "reportInterval"
+	WBURLList      = "WBURLList"
+	wb_catalog_url = "wb_catalog_url"
+	limit          = "LIMIT"
 )
 
 var configPath string
@@ -29,7 +29,7 @@ type Config struct {
 	Token          string
 	ReportInterval int
 	WBURLList      string `mapstructure:"wbURLList"`
-	WBURLParce     string `mapstructure:"wbURLParce"`
+	WbCatalogUrl   string `mapstructure:"wb_catalog_url"`
 	Limit          int64
 	MSSQL          *ConfigMSSQL `mapstructure:"mssql"`
 }
@@ -94,9 +94,9 @@ func InitConfig() (*Config, error) {
 		cfg.WBURLList = WBURLList
 	}
 
-	WBURLParce := os.Getenv(WBURLParce)
-	if cfg.WBURLParce == "" {
-		cfg.WBURLParce = WBURLParce
+	wb_catalog_url := os.Getenv(wb_catalog_url)
+	if cfg.WbCatalogUrl == "" {
+		cfg.WbCatalogUrl = wb_catalog_url
 	}
 
 	return cfg, nil

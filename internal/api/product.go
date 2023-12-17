@@ -157,7 +157,7 @@ func (p *ProductService) ParsePage(ctx context.Context, card models.Cards) model
 		p.log.Errorf("Error:", err)
 	}
 
-	url := fmt.Sprintf("%s%d/detail.aspx", p.cfg.WBURLParce, card.NmID)
+	url := fmt.Sprintf("%s%d/detail.aspx", p.cfg.WbCatalogUrl, card.NmID)
 	err = driver.Get(url)
 	if err != nil {
 		p.log.Fatal("Error:", err)

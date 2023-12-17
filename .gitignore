@@ -27,3 +27,6 @@ config.yaml
 
 # Third-party binaries
 *.exe
+
+# Secrets
+secrets/

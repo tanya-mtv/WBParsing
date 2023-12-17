@@ -24,7 +24,8 @@ RUN apt-get update && \
     cd /opt && \
     unzip /opt/chromedriver.zip && \
     unzip /opt/chrome.zip && \
-    mv /opt/chromedriver-linux64/chromedriver /chromedriver
+    mv /opt/chromedriver-linux64/chromedriver /chromedriver && \
+    mv /opt/chrome-linux64 /
     # TBD move chrome to root
 
 ######################
@@ -93,6 +94,7 @@ ARG ACCEPT_EULA=Y
 ENV CONFIG_TYPE yaml
 ENV CONFIG_PATH /usr/local/etc/crawler.yaml
 
+COPY --from=chrome /chrome-linux64 /usr/local/chrome
 COPY --from=chrome /chromedriver /usr/local/bin/chromedriver
 COPY --from=builder /wb-parsing-crawler /usr/local/bin/wb-parsing-crawler
 
@@ -105,7 +107,21 @@ RUN apt-get update && \
         gnupg2 \
         libglib2.0-0 \
         libnss3 \
-        libxcb1 && \
+        libxcb1 \
+        libdbus-1-3 \
+        libatk1.0-0 \
+        libatk-bridge2.0-0 \
+        libcups2 \
+        libdrm2 \
+        libxkbcommon0 \
+        libxcomposite1 \
+        libxdamage1 \
+        libxfixes3 \
+        libxrandr2 \
+        libgbm1 \
+        libpango-1.0-0 \
+        libcairo2 \
+        libasound2 && \
     curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc && \
     gpg --dearmor < /etc/apt/trusted.gpg.d/microsoft.asc > /usr/share/keyrings/microsoft-prod.gpg && \
     curl https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list && \
@@ -119,7 +135,10 @@ RUN apt-get update && \
     adduser --no-create-home --disabled-login --shell /bin/nologin ${USERNAME} && \
     mkdir -p ${WORK_DIR} && \
     chown ${USERNAME}:${USERNAME} ${WORK_DIR} && \
-    ln -s /usr/local/bin/chromedriver ${WORK_DIR}/chromedriver
+    ln -s /usr/local/bin/chromedriver ${WORK_DIR}/chromedriver && \
+    ln -s /usr/local/chrome/chrome ${WORK_DIR}/chrome && \
+    ${WORK_DIR}/chromedriver --version && \
+    ${WORK_DIR}/chrome --version
 
 WORKDIR ${WORK_DIR}/
 

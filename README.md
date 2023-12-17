@@ -11,10 +11,11 @@ Inside mssql-tools container:
 ```sql
 CREATE DATABASE DWH_test
 GO
-USE DWH_test;
+USE DWH_test
 GO
-CREATE TABLE wbProduct( id INT PRIMARY KEY IDENTITY (1,1), modifiedDate DATETIME, nmID int, name NVARCHAR(200), price DECIMAL(16,2),);
+CREATE TABLE wbProduct( id INT PRIMARY KEY IDENTITY (1,1), modifiedDate DATETIME, nmID int, name NVARCHAR(200), price DECIMAL(16,2),)
 GO
-CREATE TABLE wbSellerPrice (id INT PRIMARY KEY IDENTITY (1,1), modifiedDate DATETIME, nmID INT NOT NULL REFERENCES wbProduct (id), seller NVARCHAR(100), price DECIMAL(16,2));
+CREATE TABLE wbSellerPrice (id INT PRIMARY KEY IDENTITY (1,1), modifiedDate DATETIME, nmID INT NOT NULL REFERENCES wbProduct (id), seller NVARCHAR(100), price DECIMAL(16,2))
 GO
+quit
 ```

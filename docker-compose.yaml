@@ -19,7 +19,7 @@ services:
     depends_on:
       - mssql
     container_name: crawler
-    image: wb-parsing:latest
+    image: docker.io/mksmki/wb-parsing-crawler:0.1
     # restart: always
     # environment:
     #   CONFIG_TYPE: yaml

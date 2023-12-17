@@ -105,7 +105,8 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     adduser --no-create-home --disabled-login --shell /bin/nologin ${USERNAME} && \
-    mkdir -p ${WORK_DIR}
+    mkdir -p ${WORK_DIR} && \
+    chown ${USERNAME}:${USERNAME} ${WORK_DIR}
 
 COPY --from=chromedriver /chromedriver /usr/local/bin/chromedriver
 COPY --from=builder /wb-parsing-crawler /usr/local/bin/wb-parsing-crawler
@@ -113,4 +114,4 @@ COPY --from=builder /wb-parsing-crawler /usr/local/bin/wb-parsing-crawler
 WORKDIR ${WORK_DIR}/
 
 USER ${USERNAME}
-CMD ["/usr/local/bin/wb-parsing-crawler"]
+CMD ["/usr/local/bin/wb-parsing-crawler", "-config", "/usr/local/etc/crawler.yaml"]

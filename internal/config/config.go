@@ -14,7 +14,7 @@ const (
 	CONFIG_PATH    = "CONFIG_PATH"
 	yaml           = "yaml"
 	cfgPath        = "config.yaml"
-	APIToken       = "APIToken"
+	APIToken       = "WB_API_TOKEN"
 	repInterval    = "reportInterval"
 	wb_list_url    = "WB_LIST_URL"
 	wb_catalog_url = "WB_CATALOG_URL"

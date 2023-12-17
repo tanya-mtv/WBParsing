@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS wbProduct;
+
+DROP TABLE IF EXISTS wbSellerPrice;

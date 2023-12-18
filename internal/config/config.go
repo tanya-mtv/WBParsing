@@ -26,6 +26,8 @@ var configType string
 
 type Config struct {
 	Logger         *logger.Config `mapstructure:"logger"`
+	HromeDriver    string         `mapstructure:"hromedriver"`
+	HromePort      int            `mapstructure:"hromeport"`
 	Token          string
 	ReportInterval int
 	WbListUrl      string `mapstructure:"wb_list_url"`
@@ -35,8 +37,8 @@ type Config struct {
 }
 
 func init() {
-	flag.StringVar(&configType, "config-type", "yaml", "Format of configuration file type. Supported formats are: JSON, TOML, YAML, HCL, envfile and Java properties config files")
-	flag.StringVar(&configPath, "config", "config.yaml", "Path to configuration file")
+	flag.StringVar(&configType, "config-type", "", "Format of configuration file type. Supported formats are: JSON, TOML, YAML, HCL, envfile and Java properties config files")
+	flag.StringVar(&configPath, "config", "", "Path to configuration file")
 }
 
 func InitConfig() (*Config, error) {
@@ -46,6 +48,15 @@ func InitConfig() (*Config, error) {
 			configPath = configPathFromEnv
 		} else {
 			configPath = cfgPath
+		}
+	}
+
+	if configType == "" {
+		configTypeFromEnv := os.Getenv(CONFIG_TYPE)
+		if configTypeFromEnv != "" {
+			configType = configTypeFromEnv
+		} else {
+			configType = yaml
 		}
 	}
 	cfg := &Config{}

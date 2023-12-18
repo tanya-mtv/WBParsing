@@ -132,7 +132,7 @@ func (p *ProductService) ParsePage(ctx context.Context, card models.Cards) model
 	product.NmID = card.NmID
 
 	// initialize a Chrome browser instance on port 4444
-	service, err := selenium.NewChromeDriverService("./chromedriver", 4444)
+	service, err := selenium.NewChromeDriverService(p.cfg.HromeDriver, p.cfg.HromePort)
 	if err != nil {
 		p.log.Fatal("Error!", err)
 	}

@@ -53,7 +53,7 @@ func (p *ProductService) Post(ctx context.Context) (models.Out, error) {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Content-Encoding", "gzip")
+	// req.Header.Set("Content-Encoding", "gzip")
 	req.Header.Set("Authorization", p.cfg.Token)
 
 	resp, err := p.httpClient.Do(req)
@@ -92,7 +92,7 @@ func (p *ProductService) PostPagination(ctx context.Context) ([]models.Out, erro
 		}
 
 		req.Header.Set("Content-Type", "application/json")
-		req.Header.Set("Content-Encoding", "gzip")
+		// req.Header.Set("Content-Encoding", "gzip")
 		req.Header.Set("Authorization", p.cfg.Token)
 
 		resp, err := p.httpClient.Do(req)
@@ -105,12 +105,13 @@ func (p *ProductService) PostPagination(ctx context.Context) ([]models.Out, erro
 
 		jsonData, err := io.ReadAll(resp.Body)
 		if err != nil {
-			p.log.Errorf("Can't  read response body", err.Error())
+			p.log.Errorf("Can't read response body", err.Error())
 			return list, err
 		}
 
 		if err := json.Unmarshal(jsonData, &data); err != nil {
-			p.log.Errorf("Can't  unmarshal body", err.Error())
+			p.log.Errorf("Can't unmarshal body", err.Error())
+			fmt.Println("JSON body: ", string(jsonData))
 
 			return list, err
 		}
@@ -132,47 +133,55 @@ func (p *ProductService) ParsePage(ctx context.Context, card models.Cards) model
 	product.NmID = card.NmID
 
 	// initialize a Chrome browser instance on port 4444
-	service, err := selenium.NewChromeDriverService(p.cfg.HromeDriver, p.cfg.HromePort)
+	service, err := selenium.NewChromeDriverService(p.cfg.ChromeDriver, p.cfg.ChromePort)
 	if err != nil {
-		p.log.Fatal("Error!", err)
+		p.log.Fatal("ERROR: ", err)
 	}
 	defer service.Stop()
 
 	// configure the browser options
+	// see
+	// https://stackoverflow.com/questions/50642308/webdriverexception-unknown-error-devtoolsactiveport-file-doesnt-exist-while-t
 	caps := selenium.Capabilities{}
 	caps.AddChrome(chrome.Capabilities{Args: []string{
+		"start-maximized", // open Browser in maximized mode
+		"disable-infobars", // disabling infobars
 		"--headless", // comment out this line for testing
+		"--disable-extensions", // disabling extensions
+		"--disable-dev-shm-usage", // overcome limited resource problems
+		"--disable-gpu", // applicable to windows os only
+		"--no-sandbox", // Bypass OS security model
 	}})
 
 	// create a new remote client with the specified options
 	driver, err := selenium.NewRemote(caps, "")
 	if err != nil {
-		p.log.Errorf("Error:", err)
+		p.log.Errorf("ERROR: ", err)
 		// return
 	}
 
 	// maximize the current window to avoid responsive rendering
 	err = driver.MaximizeWindow("")
 	if err != nil {
-		p.log.Errorf("Error:", err)
+		p.log.Errorf("ERROR: ", err)
 	}
 
 	url := fmt.Sprintf("%s%d/detail.aspx", p.cfg.WbCatalogUrl, card.NmID)
 	err = driver.Get(url)
 	if err != nil {
-		p.log.Fatal("Error:", err)
+		p.log.Fatal("ERROR: ", err)
 	}
 
 	time.Sleep(3 * time.Second)
 
 	priceElements, err := driver.FindElements(selenium.ByCSSSelector, ".price-block__content")
 	if err != nil {
-		log.Fatal("Error:", err)
+		log.Fatal("ERROR: ", err)
 	}
 	for _, priceElements := range priceElements {
 		priceElement, err := priceElements.FindElement(selenium.ByCSSSelector, "ins.price-block__final-price")
 		if err != nil {
-			fmt.Println("Error:", err)
+			fmt.Println("ERROR: ", err)
 			continue
 		}
 
@@ -180,7 +189,7 @@ func (p *ProductService) ParsePage(ctx context.Context, card models.Cards) model
 		// fmt.Println("nameElement ", nameElement, "name ", name, "price ", price)
 
 		if err != nil {
-			fmt.Println("Error:", err)
+			fmt.Println("ERROR: ", err)
 			continue
 		}
 
@@ -216,26 +225,26 @@ func (p *ProductService) ParsePage(ctx context.Context, card models.Cards) model
 		// select the name and price nodes
 		nameElement, err := productElement.FindElement(selenium.ByCSSSelector, "p.bestsellers__name")
 		if err != nil {
-			fmt.Println("Error:", err)
+			fmt.Println("ERROR: ", err)
 			continue
 		}
 		priceElement, err := productElement.FindElement(selenium.ByCSSSelector, "span.button-basket__btn-text")
 		if err != nil {
-			fmt.Println("Error:", err)
+			fmt.Println("ERROR: ", err)
 			continue
 		}
 
 		// extract the data of interest
 		name, err := nameElement.Text()
 		if err != nil {
-			fmt.Println("Error:", err)
+			fmt.Println("ERROR: ", err)
 			continue
 		}
 
 		price, err := priceElement.Text()
 
 		if err != nil {
-			fmt.Println("Error:", err)
+			fmt.Println("ERROR: ", err)
 			continue
 		}
 

@@ -1,6 +1,6 @@
 ---
 # WB API enpoints and API Key
-token: "<WB API Token>"
+wb_api_token: "<WB API Token>"
 
 # URL to get internal catalog IDs. Environment variable: WB_LIST_URL
 wb_list_url: "https://suppliers-api.wildberries.ru/content/v1/cards/cursor/list"
@@ -8,7 +8,7 @@ wb_list_url: "https://suppliers-api.wildberries.ru/content/v1/cards/cursor/list"
 wb_catalog_url: "https://www.wildberries.ru/catalog/"
 
 #
-reportInterval: 1
+report_interval: 1
 limit: 1000
 
 logger:

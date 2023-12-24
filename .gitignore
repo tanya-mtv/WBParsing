@@ -33,3 +33,6 @@ secrets/
 
 # Logs
 logs/
+
+# Environment variables
+.env

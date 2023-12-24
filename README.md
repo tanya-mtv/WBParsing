@@ -1,5 +1,11 @@
 # WB parsing service
 
+### Docker image build
+
+```bash
+..WBParsing$ docker build -t docker.io/mksmki/wb-parsing-crawler:$(cat ./VERSION) .
+```
+
 ### Initialize SQL structure
 
 Connect to running instance of MS SQL Server

@@ -4,12 +4,12 @@ version: '3.3'
 services:
   mssql:
     container_name: sql-server
-    image: mcr.microsoft.com/mssql/server:2017-latest
-    #image: mcr.microsoft.com/mssql/server:2017-CU11-ubuntu
+    image: ${MSSQL_IMAGE}
+    # image: mcr.microsoft.com/mssql/server:2017-CU11-ubuntu
     restart: always
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: "TestUAT123"
+      SA_PASSWORD: "${MSSQL_PASSWORD}"
     ports:
       - 1433:1433
     volumes:
@@ -19,13 +19,14 @@ services:
     depends_on:
       - mssql
     container_name: crawler
-    image: docker.io/mksmki/wb-parsing-crawler:0.1
+    image: ${CRAWLER_IMAGE}
     # restart: always
-    # environment:
-    #   CONFIG_TYPE: yaml
-    #   CONFIG_PATH: /usr/local/etc/crawler.yaml
+    environment:
+      CONFIG_TYPE: yaml
+      CONFIG_PATH: /usr/local/etc/crawler.yaml
     volumes:
-      - ./secrets/uat_config.yaml:/opt/crawler/config.yaml:ro
+      # - ./secrets/uat_config.yaml:/opt/crawler/config.yaml:ro
+      - ./secrets/uat_config.yaml:/usr/local/etc/crawler.yaml:ro
       - ./logs:/opt/crawler/logs:rw
 
   # MS SQL Tools

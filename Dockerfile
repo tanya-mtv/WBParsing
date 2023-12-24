@@ -94,7 +94,7 @@ ARG ACCEPT_EULA=Y
 ENV CONFIG_TYPE yaml
 ENV CONFIG_PATH /usr/local/etc/crawler.yaml
 
-COPY --from=chrome /chrome-linux64 /usr/local/chrome
+# COPY --from=chrome /chrome-linux64 /usr/local/chrome
 COPY --from=chrome /chromedriver /usr/local/bin/chromedriver
 COPY --from=builder /wb-parsing-crawler /usr/local/bin/wb-parsing-crawler
 
@@ -121,7 +121,13 @@ RUN apt-get update && \
         libgbm1 \
         libpango-1.0-0 \
         libcairo2 \
-        libasound2 && \
+        libasound2 \
+        unzip \
+        xvfb \
+        libxi6 \
+        libgconf-2-4 \
+        fonts-liberation \
+        fonts-liberation2 && \
     curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc && \
     gpg --dearmor < /etc/apt/trusted.gpg.d/microsoft.asc > /usr/share/keyrings/microsoft-prod.gpg && \
     curl https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list && \
@@ -130,18 +136,22 @@ RUN apt-get update && \
         unixodbc \
         # install Microsoft ODBC Driver for SQL Server
         msodbcsql18 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    adduser --no-create-home --disabled-login --shell /bin/nologin ${USERNAME} && \
     mkdir -p ${WORK_DIR} && \
+    adduser --home ${WORK_DIR} --disabled-login --shell /bin/nologin ${USERNAME} && \
     chown ${USERNAME}:${USERNAME} ${WORK_DIR} && \
-    ln -s /usr/local/bin/chromedriver ${WORK_DIR}/chromedriver && \
-    ln -s /usr/local/chrome/chrome ${WORK_DIR}/chrome && \
-    ${WORK_DIR}/chromedriver --version && \
-    ${WORK_DIR}/chrome --version
+    cd ${WORK_DIR}/ && \
+    chromedriver --version >> ${WORK_DIR}/versions.txt && \
+    curl -O https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+    apt-get install --yes ./google-chrome-stable_current_amd64.deb && \
+    rm -f ./google-chrome-stable_current_amd64.deb && \
+    # ln -s /usr/bin/google-chrome /usr/local/bin/chrome && \
+    google-chrome --version --version >> ${WORK_DIR}/versions.txt && \
+    # google-chrome --headless --disable-gpu --no-sandbox --screenshot https://www.chromestatus.com/
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR ${WORK_DIR}/
 
 USER ${USERNAME}
 CMD ["/usr/local/bin/wb-parsing-crawler"]
-# CMD ["-config", "$CONFIG_PATH", "-config-type", "$CONFIG_TYPE"]
+# ["-config", "${CONFIG_PATH}", "-config-type", "${CONFIG_TYPE}"]

@@ -26,13 +26,13 @@ var configType string
 
 type Config struct {
 	Logger         *logger.Config `mapstructure:"logger"`
-	HromeDriver    string         `mapstructure:"hromedriver"`
-	HromePort      int            `mapstructure:"hromeport"`
-	Token          string
-	ReportInterval int
+	ChromeDriver    string         `mapstructure:"chromedriver"`
+	ChromePort      int            `mapstructure:"chromeport"`
+	Token          string		  `mapstructure:"wb_api_token"`
+	ReportInterval int			  `mapstructure:"report_interval"`
 	WbListUrl      string `mapstructure:"wb_list_url"`
 	WbCatalogUrl   string `mapstructure:"wb_catalog_url"`
-	Limit          int64
+	Limit          int64  `mapstructure:"limit"`
 	MSSQL          *ConfigMSSQL `mapstructure:"mssql"`
 }
 

@@ -75,8 +75,6 @@ func (a *Agent) Run() error {
 				}
 			}
 
-			//! DEBUG
-			stop()
 		}
 	}
 

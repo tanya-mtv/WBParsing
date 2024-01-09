@@ -92,7 +92,7 @@ func (p *ProductService) PostPagination(ctx context.Context) ([]models.Out, erro
 		}
 
 		req.Header.Set("Content-Type", "application/json")
-		// req.Header.Set("Content-Encoding", "gzip")
+		req.Header.Set("Content-Encoding", "gzip")
 		req.Header.Set("Authorization", p.cfg.Token)
 
 		resp, err := p.httpClient.Do(req)
@@ -144,13 +144,13 @@ func (p *ProductService) ParsePage(ctx context.Context, card models.Cards) model
 	// https://stackoverflow.com/questions/50642308/webdriverexception-unknown-error-devtoolsactiveport-file-doesnt-exist-while-t
 	caps := selenium.Capabilities{}
 	caps.AddChrome(chrome.Capabilities{Args: []string{
-		"start-maximized", // open Browser in maximized mode
-		"disable-infobars", // disabling infobars
-		"--headless", // comment out this line for testing
-		"--disable-extensions", // disabling extensions
+		"start-maximized",         // open Browser in maximized mode
+		"disable-infobars",        // disabling infobars
+		"--headless",              // comment out this line for testing
+		"--disable-extensions",    // disabling extensions
 		"--disable-dev-shm-usage", // overcome limited resource problems
-		"--disable-gpu", // applicable to windows os only
-		"--no-sandbox", // Bypass OS security model
+		"--disable-gpu",           // applicable to windows os only
+		"--no-sandbox",            // Bypass OS security model
 	}})
 
 	// create a new remote client with the specified options

@@ -41,6 +41,9 @@ func (a *Agent) Run() error {
 	sqlRepo := db.NewSQLStorage(a.log, a.cfg, sqlClient)
 	a.ps = api.NewProductService(a.cfg, a.log, sqlRepo)
 
+	a.log.Infof("Run app first time")
+	a.DoParsing(ctx)
+
 	reportIntervalTicker := time.NewTicker(time.Duration(a.cfg.ReportInterval) * time.Second)
 	defer reportIntervalTicker.Stop()
 
@@ -53,25 +56,28 @@ func (a *Agent) Run() error {
 
 			return nil
 		case <-reportIntervalTicker.C:
+			a.DoParsing(ctx)
+		}
+	}
 
-			res, err := a.ps.PostPagination(ctx)
+}
 
-			if err != nil {
-				a.log.Errorf("Error post query")
-			}
-			for _, elem := range res {
-				products := elem.Data.Cards
-				for _, val := range products {
-					product := a.ps.ParsePage(ctx, val)
-					if len(product.SellerPrice) != 0 {
-						bProduct, err := json.Marshal(&product)
-						if err != nil {
-							a.log.Errorf(err.Error())
-						}
-						a.log.Info(string(bProduct))
-					}
+func (a *Agent) DoParsing(ctx context.Context) {
+	res, err := a.ps.PostPagination(ctx)
 
+	if err != nil {
+		a.log.Errorf("Error post query")
+	}
+	for _, elem := range res {
+		products := elem.Data.Cards
+		for _, val := range products {
+			product := a.ps.ParsePage(ctx, val)
+			if len(product.SellerPrice) != 0 {
+				bProduct, err := json.Marshal(&product)
+				if err != nil {
+					a.log.Errorf(err.Error())
 				}
+				a.log.Info(string(bProduct))
 			}
 
 		}

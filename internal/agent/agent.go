@@ -41,7 +41,6 @@ func (a *Agent) Run() error {
 	sqlRepo := db.NewSQLStorage(a.log, a.cfg, sqlClient)
 	a.ps = api.NewProductService(a.cfg, a.log, sqlRepo)
 
-	// reportIntervalTicker := time.NewTicker(time.Duration(a.cfg.ReportInterval) * time.Hour)
 	reportIntervalTicker := time.NewTicker(time.Duration(a.cfg.ReportInterval) * time.Second)
 	defer reportIntervalTicker.Stop()
 

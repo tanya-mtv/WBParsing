@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"parsingWB/internal/config"
 	"parsingWB/internal/logger"
@@ -53,7 +52,7 @@ func (p *ProductService) Post(ctx context.Context) (models.Out, error) {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	// req.Header.Set("Content-Encoding", "gzip")
+	req.Header.Set("Content-Encoding", "gzip")
 	req.Header.Set("Authorization", p.cfg.Token)
 
 	resp, err := p.httpClient.Do(req)
@@ -169,14 +168,14 @@ func (p *ProductService) ParsePage(ctx context.Context, card models.Cards) model
 	url := fmt.Sprintf("%s%d/detail.aspx", p.cfg.WbCatalogUrl, card.NmID)
 	err = driver.Get(url)
 	if err != nil {
-		p.log.Fatal("ERROR: ", err)
+		p.log.Errorf("ERROR: ", err)
 	}
 
 	time.Sleep(3 * time.Second)
 
 	priceElements, err := driver.FindElements(selenium.ByCSSSelector, ".price-block__content")
 	if err != nil {
-		log.Fatal("ERROR: ", err)
+		p.log.Errorf("ERROR: ", err)
 	}
 	for _, priceElements := range priceElements {
 		priceElement, err := priceElements.FindElement(selenium.ByCSSSelector, "ins.price-block__final-price")

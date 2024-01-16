@@ -169,6 +169,7 @@ func (p *ProductService) ParsePage(ctx context.Context, card models.Cards) model
 	err = driver.Get(url)
 	if err != nil {
 		p.log.Errorf("ERROR: ", err)
+		return product
 	}
 
 	time.Sleep(3 * time.Second)
@@ -176,6 +177,7 @@ func (p *ProductService) ParsePage(ctx context.Context, card models.Cards) model
 	priceElements, err := driver.FindElements(selenium.ByCSSSelector, ".price-block__content")
 	if err != nil {
 		p.log.Errorf("ERROR: ", err)
+		return product
 	}
 	for _, priceElements := range priceElements {
 		priceElement, err := priceElements.FindElement(selenium.ByCSSSelector, "ins.price-block__final-price")

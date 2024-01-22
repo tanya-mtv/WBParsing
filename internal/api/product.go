@@ -156,13 +156,14 @@ func (p *ProductService) ParsePage(ctx context.Context, card models.Cards) model
 	driver, err := selenium.NewRemote(caps, "")
 	if err != nil {
 		p.log.Errorf("ERROR: ", err)
-		// return
+		return product
 	}
 
 	// maximize the current window to avoid responsive rendering
 	err = driver.MaximizeWindow("")
 	if err != nil {
 		p.log.Errorf("ERROR: ", err)
+		return product
 	}
 
 	url := fmt.Sprintf("%s%d/detail.aspx", p.cfg.WbCatalogUrl, card.NmID)

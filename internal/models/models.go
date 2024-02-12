@@ -4,7 +4,7 @@ import "time"
 
 type Sizes struct {
 	ChrtID   int64    `json:"chrtID"`
-	TechSize int      `json:"techSize"`
+	TechSize string   `json:"techSize"`
 	Skus     []string `json:"skus"`
 }
 

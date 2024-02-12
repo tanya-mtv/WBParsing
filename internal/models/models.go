@@ -9,7 +9,7 @@ type Sizes struct {
 }
 
 type Cards struct {
-	// Sizes      Sizes `json:"sizes"`
+	Sizes []Sizes `json:"sizes"`
 	// MediaFiles []string
 	UpdateAt   string `json:"updateAt"`
 	VendorCode string `json:"vendorCode"`
@@ -45,5 +45,6 @@ type Product struct {
 	NmID        int64
 	Name        string
 	Price       float64
+	Barcode     string
 	SellerPrice []SellerPrice
 }

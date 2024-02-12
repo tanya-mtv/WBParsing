@@ -164,6 +164,7 @@ func (p *ProductService) ParsePage(ctx context.Context, card models.Cards) model
 		p.log.Errorf("ERROR: ", err)
 		return product
 	}
+	defer driver.Close()
 
 	// maximize the current window to avoid responsive rendering
 	err = driver.MaximizeWindow("")

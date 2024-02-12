@@ -31,8 +31,8 @@ func (s *MSSQLStorage) InsertData(product models.Product) error {
 	}()
 
 	timeNow := time.Now().Format("2006-01-02")
-	stmtProd, err := tx.Prepare("INSERT INTO wbProduct (ModifiedDate, nmID, name, price) OUTPUT Inserted.ID" +
-		" VALUES(?,?,?,?)")
+	stmtProd, err := tx.Prepare("INSERT INTO wbProduct (ModifiedDate, nmID, name, price, barcode) OUTPUT Inserted.ID" +
+		" VALUES(?,?,?,?,?)")
 	if err != nil {
 		return err
 	}
@@ -46,7 +46,7 @@ func (s *MSSQLStorage) InsertData(product models.Product) error {
 	defer stmtPrice.Close()
 
 	var id int
-	err = stmtProd.QueryRow(timeNow, product.NmID, product.Name, product.Price).Scan(&id)
+	err = stmtProd.QueryRow(timeNow, product.NmID, product.Name, product.Price, product.Barcode).Scan(&id)
 	if err != nil {
 		s.log.Errorf("Cant insert data to  wbProduct", err.Error())
 		return err

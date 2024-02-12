@@ -131,6 +131,12 @@ func (p *ProductService) ParsePage(ctx context.Context, card models.Cards) model
 	product.Name = card.Title
 	product.NmID = card.NmID
 
+	if len(card.Sizes) != 0 {
+		if len(card.Sizes[0].Skus) != 0 {
+			product.Barcode = card.Sizes[0].Skus[0]
+		}
+	}
+
 	// initialize a Chrome browser instance on port 4444
 	service, err := selenium.NewChromeDriverService(p.cfg.ChromeDriver, p.cfg.ChromePort)
 	if err != nil {

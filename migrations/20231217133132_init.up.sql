@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS wbProduct
     modifiedDate DATETIME,
     nmID int,
     name NVARCHAR(200),
+    barcode NVARCHAR(20),
     price DECIMAL(16,2)
 );
 
